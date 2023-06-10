@@ -1,4 +1,4 @@
-# FastAPI
+# An example of FastAPI application
 #### Prepared by: Amirul
 An example of fastapi application with the idea of implementing the `Onion` architecture. Though this repo may not be perfect implemetation of the architecture style, but still it's a good start.
 
