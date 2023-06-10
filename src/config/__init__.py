@@ -1,0 +1,1 @@
+from .config import COMMENT_URL, POST_URL
