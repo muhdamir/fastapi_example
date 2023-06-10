@@ -2,7 +2,6 @@ from abc import ABC, abstractmethod
 
 
 class BaseRepositoryInterface(ABC):
-
     @abstractmethod
     def get_all(self):
         ...

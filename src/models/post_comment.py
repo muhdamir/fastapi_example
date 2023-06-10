@@ -1,5 +1,6 @@
 from pydantic import BaseModel, Field
 
+
 class PostCommentResponse(BaseModel):
     postId: int = Field(alias="post_id")
     title: str = Field(alias="post_title")

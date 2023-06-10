@@ -9,18 +9,17 @@ from error_messages import DataNotFound, DataParsingError
 class BaseEntity:
     api_url = None
 
-    def fetch(self, url:str) -> dict:
+    def fetch(self, url: str) -> dict:
         try:
             response = httpx.get(url)
-            if response.status_code == 200 and (json_data:=response.json()):
+            if response.status_code == 200 and (json_data := response.json()):
                 return json_data
             else:
                 raise DataNotFound
         except Exception as e:
             raise DataNotFound(f"Data from {self.api_url} is not found")
-            
-    
-    def data(self, id:Optional[int]=None) -> pd.DataFrame:
+
+    def data(self, id: Optional[int] = None) -> pd.DataFrame:
         try:
             id = f"/{id}" if id else ""
             json_data = self.fetch(f"{self.api_url}{id}")
@@ -31,9 +30,3 @@ class BaseEntity:
             raise DataNotFound
         except Exception:
             raise DataParsingError
-
-        
-
-
-    
-    
