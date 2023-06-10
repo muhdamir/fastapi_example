@@ -14,7 +14,12 @@ then simply go into src folder:
 cd ./src
 ```
 
+
 then type this command:
 ```bash
 uvicorn app:main
 ```
+
+
+By default, the FastAPI app will be running on port `8000` at localhost.
+So, to open the swaggerUI, you need to open this link `http://localhost:8000` 
