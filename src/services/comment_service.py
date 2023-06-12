@@ -1,3 +1,5 @@
+import pandas as pd
+
 from repository import CommentRepository
 
 
@@ -16,26 +18,39 @@ class CommentService:
         return selected_data
 
     def search_2(self, user_input: str):
-        selected_data = self.repository.get_all()
+        data = self.repository.get_all()
         # searching process
-        condition_1 = (
-            selected_data["email"]
-            .str.lower()
-            .str.contains(str_input := user_input.lower() if user_input else "")
-        )
-        condition_2 = selected_data["name"].str.lower().str.contains(str_input)
-        condition_3 = selected_data["body"].str.lower().str.contains(str_input)
+        condition_1 = self.Utils.search_str(data, "email", user_input)
+        condition_2 = self.Utils.search_str(data, "name", user_input)
+        condition_3 = self.Utils.search_str(data, "body", user_input)
         condition_4, condition_5 = False, False
-        condition_4 = (
-            (selected_data["postId"] == int(user_input))
-            if user_input.isnumeric()
-            else False
-        )
-        condition_5 = (
-            (selected_data["id"] == int(user_input))
-            if user_input.isnumeric()
-            else False
-        )
+        condition_4 = self.Utils.search_int(data, "postId", user_input)
+        condition_5 = self.Utils.search_int(data, "id", user_input)
         condition = condition_1 | condition_2 | condition_3 | condition_4 | condition_5
-        selected_data = selected_data.loc[condition, :]
+        selected_data = data.loc[condition, :]
         return selected_data.to_dict("records")
+
+    # TODO: take Utils as module
+    #  for now class Utils is declared here for easy access
+    class Utils:
+        @classmethod
+        def search_str(
+            cls,
+            data: pd.DataFrame,
+            col: str,
+            string: str,
+        ):
+            condition = (
+                data[col].str.lower().str.contains(string.lower() if string else "")
+            )
+            return condition
+
+        @classmethod
+        def search_int(
+            cls,
+            data: pd.DataFrame,
+            col: str,
+            int_str: str,
+        ):
+            condition = (data[col] == int(int_str)) if int_str.isnumeric() else False
+            return condition
