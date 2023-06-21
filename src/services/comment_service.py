@@ -1,6 +1,9 @@
 import pandas as pd
 
 from repository import CommentRepository
+from celery_task.main import search, celery_app
+from celery.result import AsyncResult
+import json
 
 
 # logic
@@ -29,6 +32,17 @@ class CommentService:
         condition = condition_1 | condition_2 | condition_3 | condition_4 | condition_5
         selected_data = data.loc[condition, :]
         return selected_data.to_dict("records")
+
+    def search_3(self, user_input: str):
+        data = self.repository.get_all().to_json()
+        job = search.delay(data, user_input)
+        return job.id
+
+    def get_task(self, id: str):
+        res = AsyncResult(id, app=celery_app)
+        if res.state == "SUCCESS":
+            return json.loads(res.get())
+        return {"job_id": id, "status": res.state}
 
     # TODO: take Utils as module
     #  for now class Utils is declared here for easy access
