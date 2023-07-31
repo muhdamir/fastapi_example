@@ -8,12 +8,17 @@ from config import (
     RABBITMQ_DEFAULT_USER,
     RABBITMQ_HOST,
     RABBITMQ_PORT,
+    POSTGRES_USER,
+    POSTGRES_PASSWORD,
+    POSTGRES_PORT,
+    POSTGRES_HOST
 )
 
 celery_app = Celery(
     main="celery_task",
     broker=f"amqp://{RABBITMQ_DEFAULT_USER}:{RABBITMQ_DEFAULT_PASS}@{RABBITMQ_HOST}:{RABBITMQ_PORT}//",
-    backend="rpc://",
+    # backend="rpc://",
+    backend=f"db+postgresql://{POSTGRES_USER}:{POSTGRES_PASSWORD}@{POSTGRES_HOST}:{POSTGRES_PORT}/jobs"
 )
 
 
